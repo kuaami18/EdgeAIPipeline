@@ -48,15 +48,17 @@ android {
 }
 
 dependencies {
-    // 1. Core API exposing org.tensorflow.lite.Interpreter
+    // TFLite Core & API
     implementation("org.tensorflow:tensorflow-lite-api:2.16.1")
-
-    // 2. Runtime C++ binaries with strict transitive exclusion
     implementation("org.tensorflow:tensorflow-lite:2.16.1") {
         isTransitive = false
     }
 
-    // AndroidX & Compose dependencies
+    // TFLite GPU Delegate
+    implementation("org.tensorflow:tensorflow-lite-gpu:2.16.1")
+    implementation("org.tensorflow:tensorflow-lite-gpu-api:2.16.1")
+
+    // Compose & AndroidX dependencies
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)

@@ -17,6 +17,8 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
+import org.tensorflow.lite.gpu.CompatibilityList
+import org.tensorflow.lite.gpu.GpuDelegate
 
 class MainActivity : ComponentActivity() {
 
@@ -113,4 +115,17 @@ class MainActivity : ComponentActivity() {
         super.onDestroy()
         interpreter?.close()
     }
+}
+private fun getInterpreterOptions(useGpu: Boolean): Interpreter.Options {
+    val options = Interpreter.Options()
+    if (useGpu) {
+        val compatList = CompatibilityList()
+        if (compatList.isDelegateSupportedOnThisDevice) {
+            val delegateOptions = compatList.bestOptionsForThisDevice
+            options.addDelegate(GpuDelegate(delegateOptions))
+        }
+    } else {
+        options.setNumThreads(4) // Multithreading on CPU
+    }
+    return options
 }
